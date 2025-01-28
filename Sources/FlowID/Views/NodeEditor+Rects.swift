@@ -11,7 +11,7 @@ public extension NodeEditor {
         switch dragInfo {
         case let .node(id: id, offset: offset):
             if node.id == id {
-                print("offset", offset) // ok
+                //print("offset", offset) // ok
                 return offset
             }
             if selection.contains(id), selection.contains(node.id) {

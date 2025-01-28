@@ -124,7 +124,7 @@ extension NodeEditor {
 
         for node in patch.nodes {
             let offset = self.offset(for: node)
-            print(node.id.uuid.0,"offset",offset)
+            //print(node.id.uuid.0,"offset",offset)
             let rect = node.rect(layout: layout).offset(by: offset)
 
             guard rect.intersects(viewport) else { continue }

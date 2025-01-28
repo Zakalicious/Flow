@@ -7,13 +7,11 @@ func simplePatch() -> Patch {
     let mixer = Node(name: "mixer", id: UUID(), titleBarColor: Color.gray, inputs: ["in1", "in2"], outputs: ["out"])
     let output = Node(name: "output", id: UUID(), titleBarColor: Color.purple, inputs: ["in"])
 
-    let nodes = [generator, output]
-    
-    for n in nodes {
-        print("n.id", n.id)
-    }
+    let nodes = [generator, processor, output]
 
-    let wires = Set([Wire(from: OutputID(generator.id, 0), to: InputID(output.id, 0))])
+    let wires = Set([
+        Wire(from: OutputID(generator.id, 0), to: InputID(processor.id, 0)),
+        Wire(from: OutputID(processor.id, 0), to: InputID(output.id, 0))])
 
     var patch = Patch(nodes: nodes, wires: wires)
     patch.recursiveLayout(nodeIndex: nodes.count-1, at: CGPoint(x: 800, y: 50))

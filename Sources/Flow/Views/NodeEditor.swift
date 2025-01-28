@@ -11,7 +11,7 @@ public struct NodeEditor: View {
     @Binding var patch: Patch
 
     /// Selected nodes.
-    @Binding var selection: Set<NodeIndex>
+    @Binding var selection: Set<UUID>
 
     /// State for all gestures.
     @GestureState var dragInfo = DragInfo.none
@@ -52,7 +52,7 @@ public struct NodeEditor: View {
     ///   - patch: Patch to display.
     ///   - selection: Set of nodes currently selected.
     public init(patch: Binding<Patch>,
-                selection: Binding<Set<NodeIndex>>,
+                selection: Binding<Set<UUID>>,
                 layout: LayoutConstants = LayoutConstants())
     {
         _patch = patch
@@ -98,4 +98,14 @@ public struct NodeEditor: View {
             transformChanged(pan, newValue)
         }
     }
+    
+    public func getNode(with id: UUID) -> Node? {
+        for n in patch.nodes {
+            if n.id == id {
+                return n
+            }
+        }
+        return nil
+    }
+
 }

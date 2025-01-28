@@ -4,16 +4,16 @@ import SwiftUI
 
 public extension NodeEditor {
     /// Offset to apply to a node based on selection and gesture state.
-    func offset(for idx: NodeIndex) -> CGSize {
-        if patch.nodes[idx].locked {
+    func offset(for node: Node) -> CGSize {
+        if node.locked {
             return .zero
         }
         switch dragInfo {
-        case let .node(index: index, offset: offset):
-            if idx == index {
+        case let .node(id: id, offset: offset):
+            if node.id == id {
                 return offset
             }
-            if selection.contains(index), selection.contains(idx) {
+            if selection.contains(id), selection.contains(node.id) {
                 // Offset other selected node only if we're dragging the
                 // selection.
                 return offset
@@ -36,7 +36,8 @@ public extension NodeEditor {
         // Search nodes in reverse to find nodes drawn on top first.
         for (nodeIndex, node) in patch.nodes.enumerated().reversed() {
             if let portIndex = findInput(node: node, point: point, type: type) {
-                return InputID(nodeIndex, portIndex)
+                let nodeID = node.id
+                return InputID(nodeID, portIndex)
             }
         }
         return nil
@@ -54,7 +55,8 @@ public extension NodeEditor {
         // Search nodes in reverse to find nodes drawn on top first.
         for (nodeIndex, node) in patch.nodes.enumerated().reversed() {
             if let portIndex = findOutput(node: node, point: point) {
-                return OutputID(nodeIndex, portIndex)
+                let nodeID = node.id
+                return OutputID(nodeID, portIndex)
             }
         }
         return nil

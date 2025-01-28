@@ -5,15 +5,16 @@ import Foundation
 
 extension Patch {
     enum HitTestResult {
-        case node(NodeIndex)
-        case input(NodeIndex, PortIndex)
-        case output(NodeIndex, PortIndex)
+        case node(UUID)
+        case input(UUID, PortIndex)
+        case output(UUID, PortIndex)
     }
 
     /// Hit test a point against the whole patch.
     func hitTest(point: CGPoint, layout: LayoutConstants) -> HitTestResult? {
         for (nodeIndex, node) in nodes.enumerated().reversed() {
-            if let result = node.hitTest(nodeIndex: nodeIndex, point: point, layout: layout) {
+            let nodeID = nodes[nodeIndex].id
+            if let result = node.hitTest(nodeID: nodeID, point: point, layout: layout) {
                 return result
             }
         }
@@ -32,12 +33,12 @@ extension Patch {
         }
     }
 
-    func selected(in rect: CGRect, layout: LayoutConstants) -> Set<NodeIndex> {
-        var selection = Set<NodeIndex>()
+    func selected(in rect: CGRect, layout: LayoutConstants) -> Set<UUID> {
+        var selection = Set<UUID>()
 
         for (idx, node) in nodes.enumerated() {
             if rect.intersects(node.rect(layout: layout)) {
-                selection.insert(idx)
+                selection.insert(node.id)
             }
         }
         return selection

@@ -7,6 +7,7 @@ public typealias PortIndex = Int
 
 /// Uniquely identifies an input by indices.
 public struct InputID: Equatable, Hashable {
+    public let nodeID: UUID
     public let nodeIndex: NodeIndex
     public let portIndex: PortIndex
 
@@ -14,7 +15,8 @@ public struct InputID: Equatable, Hashable {
     /// - Parameters:
     ///   - nodeIndex: Index for the node the input belongs
     ///   - portIndex: Index to the input within the node
-    public init(_ nodeIndex: NodeIndex, _ portIndex: PortIndex) {
+    public init(_ nodeID: UUID, _ nodeIndex: NodeIndex, _ portIndex: PortIndex) {
+        self.nodeID = nodeID
         self.nodeIndex = nodeIndex
         self.portIndex = portIndex
     }
@@ -22,6 +24,7 @@ public struct InputID: Equatable, Hashable {
 
 /// Uniquely identifies an output by indices.
 public struct OutputID: Equatable, Hashable {
+    public let nodeID: UUID
     public let nodeIndex: NodeIndex
     public let portIndex: PortIndex
 
@@ -29,7 +32,8 @@ public struct OutputID: Equatable, Hashable {
     /// - Parameters:
     ///   - nodeIndex: Index for the node the output belongs
     ///   - portIndex: Index to the output within the node
-    public init(_ nodeIndex: NodeIndex, _ portIndex: PortIndex) {
+    public init(_ nodeID: UUID,_ nodeIndex: NodeIndex, _ portIndex: PortIndex) {
+        self.nodeID = nodeID
         self.nodeIndex = nodeIndex
         self.portIndex = portIndex
     }

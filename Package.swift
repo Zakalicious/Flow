@@ -3,11 +3,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "Flow",
+    name: "FlowID",
     platforms: [.macOS(.v12), .iOS(.v15)],
-    products: [.library(name: "Flow", targets: ["Flow"])],
+    products: [.library(name: "FlowID", targets: ["FlowID"])],
     targets: [
-        .target(name: "Flow"),
-        .testTarget(name: "FlowTests", dependencies: ["Flow"]),
+        .target(name: "FlowID"),
+        .testTarget(name: "FlowTests", dependencies: ["FlowID"]),
     ]
 )

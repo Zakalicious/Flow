@@ -12,8 +12,8 @@ extension Patch {
 
     /// Hit test a point against the whole patch.
     func hitTest(point: CGPoint, layout: LayoutConstants) -> HitTestResult? {
-        for (nodeIndex, node) in nodes.enumerated().reversed() {
-            let nodeID = nodes[nodeIndex].id
+        for node in nodes {
+            let nodeID = node.id
             if let result = node.hitTest(nodeID: nodeID, point: point, layout: layout) {
                 return result
             }
@@ -23,24 +23,48 @@ extension Patch {
     }
 
     mutating func moveNode(
-        nodeIndex: NodeIndex,
+        nodeID: UUID,
         offset: CGSize,
         nodeMoved: NodeEditor.NodeMovedHandler
     ) {
-        if !nodes[nodeIndex].locked {
-            nodes[nodeIndex].position += offset
-            nodeMoved(nodeIndex, nodes[nodeIndex].position)
-        }
+        var i = getNodeIndex(with: nodeID)
+            if !nodes[i].locked {
+                //print(nodeID.uuid.0, "at", n!.position)
+                nodes[i].position += offset
+                nodeMoved(nodes[i], nodes[i].position)
+                //print(n!.id.uuid.0, "to", n!.position)
+                //for n2 in nodes { print(n2.position)}
+
+            }
+        
     }
 
     func selected(in rect: CGRect, layout: LayoutConstants) -> Set<UUID> {
         var selection = Set<UUID>()
 
-        for (idx, node) in nodes.enumerated() {
+        for node in nodes {
             if rect.intersects(node.rect(layout: layout)) {
                 selection.insert(node.id)
             }
         }
         return selection
+    }
+    
+    public func getNode(with id: UUID) -> Node? {
+        for n in self.nodes {
+            if n.id == id {
+                return n
+            }
+        }
+        return nil
+    }
+    
+    public func getNodeIndex(with id: UUID) -> Int {
+        for i in 0..<self.nodes.count {
+            if nodes[i].id == id {
+                return i
+            }
+        }
+        return -1
     }
 }

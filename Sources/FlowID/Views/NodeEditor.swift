@@ -4,8 +4,8 @@ import SwiftUI
 
 /// Draws and interacts with the patch.
 ///
-/// Draws everything using a single Canvas with manual layout. We found this is faster than
-/// using a View for each Node.
+/// Draws everything using a single Canvas with manual layout.
+/// We found this is faster thanusing a View for each Node.
 public struct NodeEditor: View {
     /// Data model.
     @Binding var patch: Patch
@@ -20,7 +20,7 @@ public struct NodeEditor: View {
     @StateObject var textCache = TextCache()
 
     /// Node moved handler closure.
-    public typealias NodeMovedHandler = (_ index: NodeIndex,
+    public typealias NodeMovedHandler = (_ node: Node,
                                          _ location: CGPoint) -> Void
 
     /// Called when a node is moved.

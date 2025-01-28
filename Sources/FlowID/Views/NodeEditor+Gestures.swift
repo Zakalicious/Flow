@@ -113,32 +113,32 @@ extension NodeEditor {
                             layout: layout
                         )
                     case let .node(nodeID):
-//                        patch.moveNode(
-//                            nodeIndex: nodeID,
-//                            offset: translation,
-//                            nodeMoved: self.nodeMoved
-//                        )
+                        patch.moveNode(
+                            nodeID: nodeID,
+                            offset: translation,
+                            nodeMoved: self.nodeMoved
+                        )
                         if selection.contains(nodeID) {
-//                            for idx in selection where idx != nodeIndex {
-//                                patch.moveNode(
-//                                    nodeIndex: idx,
-//                                    offset: translation,
-//                                    nodeMoved: self.nodeMoved
-//                                )
-//                            }
+                            for id in selection where id != nodeID {
+                                patch.moveNode(
+                                    nodeID: id,
+                                    offset: translation,
+                                    nodeMoved: self.nodeMoved
+                                )
+                            }
                         }
-                    case let .output(nodeIndex, portIndex):
+                    case let .output(nodeID, portIndex):
                         let type = PortType.signal
                         //let type = patch.nodes[nodeIndex].outputs[portIndex].type
                         if let input = findInput(point: location, type: type) {
-                            connect(OutputID(nodeIndex, portIndex), to: input)
+                            connect(OutputID(nodeID, portIndex), to: input)
                         }
-                    case let .input(nodeIndex, portIndex):
+                    case let .input(nodeID, portIndex):
                         let type = PortType.signal
 
                         //let type = patch.nodes[nodeIndex].inputs[portIndex].type
                         // Is a wire attached to the input?
-                        if let attachedWire = attachedWire(inputID: InputID(nodeIndex, portIndex)) {
+                        if let attachedWire = attachedWire(inputID: InputID(nodeID, portIndex)) {
                             patch.wires.remove(attachedWire)
                             wireRemoved(attachedWire)
                             if let input = findInput(point: location, type: type) {
@@ -151,8 +151,11 @@ extension NodeEditor {
                     switch hitResult {
                     case .none:
                         selection = Set<UUID>()
-                    case let .node(nodeIndex):
-                        selection = Set<UUID>([nodeIndex])
+                        print("no selection")
+                    case let .node(nodeID):
+                        selection = Set<UUID>([nodeID])
+                        print("selected",selection.first?.uuid.0 )
+
                     default: break
                     }
                 }

@@ -122,14 +122,15 @@ extension NodeEditor {
         var resolvedInputColors = [PortType: GraphicsContext.Shading]()
         var resolvedOutputColors = [PortType: GraphicsContext.Shading]()
 
-        for (nodeIndex, node) in patch.nodes.enumerated() {
+        for node in patch.nodes {
             let offset = self.offset(for: node)
+            print(node.id.uuid.0,"offset",offset)
             let rect = node.rect(layout: layout).offset(by: offset)
 
             guard rect.intersects(viewport) else { continue }
 
             let pos = rect.origin
-
+            //print(node.id.uuid.0, "pos",pos)
             let cornerRadius = layout.nodeCornerRadius
             let bg = Path(roundedRect: rect, cornerRadius: cornerRadius)
 
@@ -215,7 +216,7 @@ extension NodeEditor {
                 output: wire.output.portIndex,
                 layout: self.layout
             )
-                .offset(by: self.offset(for: n!)).center
+            .offset(by: self.offset(for: n!)).center
             
             n = getNode(with: wire.input.nodeID)
             let toPoint = n!.inputRect(

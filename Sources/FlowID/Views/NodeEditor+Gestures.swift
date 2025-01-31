@@ -79,20 +79,20 @@ extension NodeEditor {
                 case let .output(nodeID, portIndex):
                     dragInfo = DragInfo.wire(output: OutputID(nodeID, portIndex), offset: translation)
                 case let .input(noteID, portIndex):
-                    print("FIX")
-//                    let node = patch.nodes[nodeIndex]
-//                    // Is a wire attached to the input?
-//                    if let attachedWire = attachedWire(inputID: InputID(self.nodeID, portIndex)) {
-//                        let offset = node.inputRect(input: portIndex, layout: layout).center
-//                            - patch.nodes[attachedWire.output.nodeIndex].outputRect(
-//                                output: attachedWire.output.portIndex,
-//                                layout: layout
-//                            ).center
-//                            + translation
-//                        dragInfo = .wire(output: attachedWire.output,
-//                                         offset: offset,
-//                                         hideWire: attachedWire)
-//                    }
+                    let node = getNode(with: noteID)
+                    // Is a wire attached to the input?
+                    if let attachedWire = attachedWire(inputID: InputID(node!.id, portIndex)) {
+                        let attachedWireOutputNode = getNode(with: attachedWire.output.nodeID)
+                        let offset = node!.inputRect(input: portIndex, layout: layout).center
+                        - attachedWireOutputNode!.outputRect(
+                                output: attachedWire.output.portIndex,
+                                layout: layout
+                            ).center
+                            + translation
+                        dragInfo = .wire(output: attachedWire.output,
+                                         offset: offset,
+                                         hideWire: attachedWire)
+                    }
                 }
             }
             .onEnded { drag in
@@ -151,11 +151,8 @@ extension NodeEditor {
                     switch hitResult {
                     case .none:
                         selection = Set<UUID>()
-                        print("no selection")
                     case let .node(nodeID):
                         selection = Set<UUID>([nodeID])
-                        print("selected",selection.first?.uuid.0 )
-
                     default: break
                     }
                 }

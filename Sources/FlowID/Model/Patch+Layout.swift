@@ -17,9 +17,8 @@ public extension Patch {
     ) -> (aggregateHeight: CGFloat,
           consumedNodeIndexes: Set<UUID>)
     {
-        var n = getNode(with: nodeID)
-        //nodes[nodeIndex].position = point
-        n!.position = point
+        var i = getNodeIndex(with: nodeID)
+        nodes[i].position = point
         // XXX: super slow
         let incomingWires = wires.filter {
             $0.input.nodeID == nodeID
@@ -43,7 +42,7 @@ public extension Patch {
             consumedNodeIndexes.formUnion(rl.consumedNodeIndexes)
         }
 
-        let nodeHeight = n!.rect(layout: layout).height
+        let nodeHeight = nodes[i].rect(layout: layout).height
         let aggregateHeight = max(height, nodeHeight) + (nodePadding ? layout.nodeSpacing : 0)
         return (aggregateHeight: aggregateHeight,
                 consumedNodeIndexes: consumedNodeIndexes)

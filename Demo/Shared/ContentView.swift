@@ -13,7 +13,7 @@ func simplePatch() -> Patch {
         Wire(from: OutputID(generator.id, 0), to: InputID(processor.id, 0)),
         Wire(from: OutputID(processor.id, 0), to: InputID(output.id, 0))])
 
-    var patch = Patch(nodes: nodes, wires: wires)
+    var patch = Patch(id: UUID(), name: "Untitled", nodes: nodes, wires: wires)
     patch.recursiveLayout(nodeID: output.id, at: CGPoint(x: 800, y: 50))
     return patch
 }

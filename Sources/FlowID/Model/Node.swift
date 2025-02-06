@@ -13,7 +13,7 @@ public struct Node: Equatable {
     public var position: CGPoint
     public var titleBarColor: Color
 
-    /// Is the node position fixed so it can't be edited in the UI?
+    // Is the node position fixed so it can't be edited in the UI?
     public var locked = false
 
     public var inputs: [Port]

@@ -116,8 +116,11 @@ extension NodeEditor {
         let connectedInputs = Set( patch.wires.map { wire in wire.input } )
         let connectedOutputs = Set( patch.wires.map { wire in wire.output } )
 
-        let selectedShading = cx.resolve(.color(style.nodeColor.opacity(0.8)))
+        let selectedShading = cx.resolve(.color(style.nodeColor.opacity(1.0)))
         let unselectedShading = cx.resolve(.color(style.nodeColor.opacity(0.4)))
+        
+        let selectedBorderShading = cx.resolve(.color(.blue))
+        let unselectedBorderShading = cx.resolve(.color(.white.opacity(0.1)))
 
         var resolvedInputColors = [PortType: GraphicsContext.Shading]()
         var resolvedOutputColors = [PortType: GraphicsContext.Shading]()
@@ -143,7 +146,7 @@ extension NodeEditor {
             }
 
             cx.fill(bg, with: selected ? selectedShading : unselectedShading)
-            
+
             // Draw the title bar for the node. There seems to be
             // no better cross-platform way to render a rectangle with the top
             // two cornders rounded.
@@ -163,9 +166,10 @@ extension NodeEditor {
             titleBar.closeSubpath()
             
             cx.fill(titleBar, with: .color(node.titleBarColor))
-            
+            cx.stroke(bg, with: selected ? selectedBorderShading : unselectedBorderShading, lineWidth: 2)
+
             if rect.contains(toLocal(mousePosition)) {
-                cx.stroke(bg, with: .color(.white), style: .init(lineWidth: 1.0))
+                cx.stroke(bg, with: .color(.white), style: .init(lineWidth: 2.0))
             }
 
             cx.draw(textCache.text(string: node.name, font: layout.nodeTitleFont, cx),
@@ -234,13 +238,13 @@ extension NodeEditor {
     }
 
     func drawDraggedWire(cx: GraphicsContext) {
-//        if case let .wire(output: output, offset: offset, _) = dragInfo {
-//            let outputRect = self.patch
-//                .nodes[output.nodeIndex]
-//                .outputRect(output: output.portIndex, layout: self.layout)
-//            let gradient = self.gradient(for: output)
-//            cx.strokeWire(from: outputRect.center, to: outputRect.center + offset, gradient: gradient)
-//        }
+        
+        if case let .wire(output: output, offset: offset, _) = dragInfo {
+            let n = getNode(with: output.nodeID)
+            let outputRect = n?.outputRect(output: output.portIndex, layout: self.layout)
+            let gradient = self.gradient(for: output)
+            cx.strokeWire(from: outputRect!.center, to: outputRect!.center + offset, gradient: gradient)
+        }
     }
 
     func drawSelectionRect(cx: GraphicsContext) {
@@ -251,12 +255,12 @@ extension NodeEditor {
     }
 
     func gradient(for outputID: OutputID) -> Gradient {
-        let portType = PortType.signal // FIX
-//        let portType = patch
-//            .nodes[outputID.nodeIndex]
-//            .outputs[outputID.portIndex]
-//            .type
-        return style.gradient(for: portType) ?? .init(colors: [.gray])
+        let n = getNode(with: outputID.nodeID)
+        if let portType = n?.outputs[outputID.portIndex]
+            .type {
+            return style.gradient(for: portType) ?? .init(colors: [.gray])
+        }
+        return Gradient(colors: [.gray])
     }
 
     func gradient(for wire: Wire) -> Gradient {

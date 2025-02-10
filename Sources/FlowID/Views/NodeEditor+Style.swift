@@ -6,7 +6,7 @@ public extension NodeEditor {
     /// Configuration used to determine rendering style of a ``NodeEditor`` instance.
     struct Style {
         /// Color used for rendering nodes.
-        public var nodeColor: Color = .init(white: 0.3)
+        public var nodeColor: Color = .init(white: 0.4)
 
         /// Color used for rendering control wires.
         public var controlWire: WireStyle = .init()

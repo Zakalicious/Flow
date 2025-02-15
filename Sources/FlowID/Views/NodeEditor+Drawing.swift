@@ -215,6 +215,7 @@ extension NodeEditor {
                     node = n
                 }
             }
+            if node == nil { return } // TH
             var n = getNode(with: wire.output.nodeID)
             let fromPoint = node!.outputRect(
                 output: wire.output.portIndex,

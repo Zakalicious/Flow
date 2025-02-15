@@ -81,17 +81,19 @@ extension NodeEditor {
                 case let .input(noteID, portIndex):
                     let node = getNode(with: noteID)
                     // Is a wire attached to the input?
-                    if let attachedWire = attachedWire(inputID: InputID(node!.id, portIndex)) {
-                        let attachedWireOutputNode = getNode(with: attachedWire.output.nodeID)
-                        let offset = node!.inputRect(input: portIndex, layout: layout).center
-                        - attachedWireOutputNode!.outputRect(
+                    if let attachedWire = attachedWire(inputID: InputID(node!.id, portIndex)) { // TH
+                        if let attachedWireOutputNode = getNode(with: attachedWire.output.nodeID) {
+                            let offset = node!.inputRect(input: portIndex, layout: layout).center
+                            - attachedWireOutputNode.outputRect(
                                 output: attachedWire.output.portIndex,
                                 layout: layout
                             ).center
                             + translation
-                        dragInfo = .wire(output: attachedWire.output,
-                                         offset: offset,
-                                         hideWire: attachedWire)
+                            dragInfo = .wire(output: attachedWire.output,
+                                             offset: offset,
+                                             hideWire: attachedWire)
+                        }
+                            
                     }
                 }
             }
